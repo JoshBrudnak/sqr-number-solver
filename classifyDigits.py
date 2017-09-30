@@ -1,20 +1,44 @@
 import tensorflow as tf
+import os
+from tensorflow.examples.tutorials.mnist import input_data
 
 class classifyDigits():
-  x = tf.placeholder(tf.float32, [None, 10])
-  weights = tf.Variable(tf.zeros([10, 10]))
+  inputs = tf.placeholder(tf.float32, [None, 784])
+  outputs = tf.placeholder(tf.float32, [None, 10])
+  weights = tf.Variable(tf.zeros([784, 10]))
   biases = tf.Variable(tf.zeros([10]))
+  
+  #silences tensorflow info logging
+  os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 
-  def parseTrainingData():
-    trainFile = tf.train.string_input_producer("mnist_train.csv")
-    testFile = tf.train.string_input_producer("mnist_train.csv")
+  # TODO get csv mnist parsing working
+  def parseTrainingData(self):
+    trainingData = []
+    testingData = []
+    trainingLabels = []
+    testingLabels = []
+    
+    trainFile = open("mnist_train.csv")
+    testFile = open("mnist_train.csv")
+    trainFile.seek(0)
 
-    reader = tf.TextLineReader()
-    label, image = reader.read(trainFile)
-    label, image = reader.read(testFile)
+    for line in trainFile:
+      reader = tf.TextLineReader()
+      trainLabel, trainIm = reader.read(line)
+      trainingData.append(trainIm)
+      trainingLabels.append(trainLabel)
+
+    for line in testFile:
+      reader = tf.TextLineReader()
+      testLabel, testIm = reader.read(testFile)
+      testingData.append(testIm)
+      testingLabels.append(testLabel)
+
+    print(trainLabel)
  
-    defaultLabels = tf.Variable(tf.zeros([784]))
-    trainData, trainLabels = tf.decode_csv(image, record_defaults=defaultLabels)
+    defaults = [[""],[0]]
+    trainData, trainLabels = tf.decode_csv(image, record_defaults=defaults)
+    trainImages = tf.image.decode_png(trainData, channels=3)
 
   def convertImage(imageName):
     imageFile = tf.read_file(im_dir+im_name)
@@ -24,8 +48,28 @@ class classifyDigits():
   
     return image
 
-  def classifyImage():
-    y = tf.nn.softmax(tf.matmul(x, weights) + biases)
+  def classifyImage(self, data):
+    y = tf.matmul(self.inputs, self.weights) + self.biases
+    session = tf.Session()
+    session.run(y)
+    yhat = self.classifyImage()
+    print(yhat)
 
-  def trainModel(trainData, testData):
-    y = tf.nn.softmax(tf.matmul(x, weights) + biases)
+    return y
+
+  def trainModel(self):
+    mnistData = input_data.read_data_sets("MNIST_data", one_hot=True)
+    self.classifyImage(mnistData)
+    #train = tf.train.GradientDescentOptimizer(0.3).minimize(crossEntropy)
+
+    #for _ in range(100):
+    #  dataPart = mnist.train.next_batch(100)
+    #  train.run(feed_dict={x: dataPart[0], y: dataPart[1]})
+
+    #correct_prediction = tf.equal(tf.argmax(y,1), tf.argmax(y_,1))
+    #accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+    #print(accuracy.eval(feed_dict={x: mnist.test.images, y: mnist.test.labels}))
+ 
+
+digits = classifyDigits()
+digits.trainModel()
