@@ -1,12 +1,7 @@
-import tensorflow as tf
-import os
 import csv
-import math 
+from Model import Model
 
-class classifyDigits():
-  
-  #silences tensorflow info logging
-  os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
+class ClassifyDigits():
 
   # TODO get csv mnist parsing working
   def parseTrainingData(self, csvFile, imageSize):
@@ -16,21 +11,22 @@ class classifyDigits():
 
     for row in reader:
       if(len(data) <= 1000):
-        intRow = []
+        floatRow = []
         labels.append(int(row[0]))
         for i in range(1, len(row)):
-          intRow.append(int(row[i]))
+          floatRow.append(float(row[i]))
        
         image = []
         for i in range(0, 28):
           index = imageSize * i
-          image.append(intRow[index : index + imageSize])
-        
+          imageRow = []
+          for j in range(0, 28):
+            imageRow.append([floatRow[index + j]])
+          image.append(imageRow)
         data.append(image)
       else:
-       break
+        break
 
-    print(len(data))
     return labels, data
 
   def convertImage(imageName):
@@ -41,12 +37,16 @@ class classifyDigits():
   
     return image
 
-  def trainModel(self):
+  def train(self):
+    model = Model()
     trainFile = open("mnist_train.csv")
     testFile = open("mnist_test.csv")
 
     trainingLabels, trainingData = self.parseTrainingData(trainFile, 28)
     testingLabels, testingData = self.parseTrainingData(testFile, 28) 
-
-train = classifyDigits()
-train.trainModel()
+ 
+    model.initModel(30, 3)
+    model.trainModel(trainingData, testingData, trainingLabels, testingLabels)
+ 
+train = ClassifyDigits()
+train.train()
