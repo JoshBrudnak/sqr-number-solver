@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+from ClassifyDigits import ClassifyDigits
 from matplotlib import pyplot as plt
 
 def perspective_transform():
@@ -63,21 +64,6 @@ def perspective_transform():
 
     cv2.imwrite("warped.jpg", warp)
 
-def read_lines():
-
-    img = cv2.imread('./sudoku.png')
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    edges = cv2.Canny(gray, 50, 150, apertureSize=3)
-    lines = cv2.HoughLinesP(edges, 1, np.pi / 180, 100,
-                            minLineLength=1, maxLineGap=10)
-    for line in lines:
-        # print(line[0])
-        x1, y1, x2, y2 = line[0]
-        cv2.line(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
-
-    cv2.imwrite('houghlines.jpg', img)
-
-
 def detect_rects():
     img = cv2.imread('warped.jpg', 0)
     height = img.shape[0]
@@ -88,6 +74,8 @@ def detect_rects():
     count = 0
     rowCount = 0
 
+    arr = []
+
     for i in range(0, height - 1, h_divs):
         rowCount = rowCount + 1
         for j in range(0, width - w_divs, w_divs):
@@ -95,11 +83,15 @@ def detect_rects():
                 crop_img = img[(i):(h_divs + i ),
                             (j):(w_divs + j )]
                 crop_img = cv2.resize(crop_img, (28, 28))
+                arr.append(np.asarray(crop_img).tolist())
                 cv2.imwrite('ocr_cell_' + str(count) + '.jpg', crop_img)
                 count = count + 1
-
+    return arr
 
 
 if __name__ == '__main__':
-   perspective_transform()
-   detect_rects()
+    perspective_transform()
+    images = detect_rects()
+    digit = ClassifyDigits()
+    numbers = digit.classifyDigitArray(images)
+    print(numbers)

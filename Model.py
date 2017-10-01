@@ -45,9 +45,10 @@ class Model():
       strides=[1, 2, 2, 1],
       padding="SAME"
     )
-      reluStep = tf.nn.relu(convLayer)
-      poolLayer = tf.layers.max_pooling2d(inputs=reluStep, pool_size=[2, 2], strides=2)
-      convResult = poolLayer
+
+    reluStep = tf.nn.relu(convLayer)
+    poolLayer = tf.layers.max_pooling2d(inputs=reluStep, pool_size=[2, 2], strides=2)
+    convResult = poolLayer
 
     # image flattening layer
     pool2_flat = tf.reshape(convResult, [-1, 4])
