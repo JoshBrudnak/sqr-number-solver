@@ -7,7 +7,7 @@ from solver import theGrid
 UPLOAD_FOLDER = './uploads/'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
-app = Flask(__name__, static_url_path='')
+app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 solved = [
@@ -45,11 +45,17 @@ def doris():
     <h1>A page for Doris</h1>
     <h6>By Aaron Goodfellow</h6>
     <p>Lorem Ipsum and stuff</h6>
+    <div id='root'></div>
+    <script src="./main.js"></script>
     '''
 
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/static/<path:path>')
+def send_js(path):
+    return send_from_directory('static', path)
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():

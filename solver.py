@@ -19,9 +19,6 @@ grid1 = [[3, 0, 6, 5, 0, 8, 4, 0, 0],
    #         [0, 0, 0, 0, 4, 0, 0, 0, 9]]
 import json
 
-
-
-
 def findFreePosition(grid):
     for y in range(9):
         for x in range(9):
