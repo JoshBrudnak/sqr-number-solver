@@ -4,8 +4,7 @@ from matplotlib import pyplot as plt
 
 
 def read_lines():
-
-    img = cv2.imread('./sudoku.png')
+    img = cv2.imread('./noname1.jpg')
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     edges = cv2.Canny(gray, 50, 150, apertureSize=3)
     lines = cv2.HoughLinesP(edges, 1, np.pi / 180, 100,
@@ -15,27 +14,31 @@ def read_lines():
         x1, y1, x2, y2 = line[0]
         cv2.line(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
 
-    cv2.imwrite('houghlines.jpg', img)
+    cv2.imwrite('handwritten.jpg', img)
 
 
 def detect_rects():
-    img = cv2.imread('houghlines.jpg', 0)
-    # crop_img = img[55: 110, 165:220]
-    # cv2.imshow('shit', crop_img)
+    img = cv2.imread('handwritten.jpg', 0)
+    print(len(img))
+    #crop_img = img[0:230, 0:200]
+    #crop_img = img[0:230, 200:400]
+    #cv2.imshow('shit', crop_img)
     # cv2.waitKey(0)
-    max = len(img) // 55
-    count = 0
+    max = len(img) // 210
+    print("max: {}".format(max))
 
+    count = 0
+    arr = []
     for i in range(0, max, 1):
         for j in range(0, max, 1):
-            inner = 55 * j
-            print("i:{} j:{}".format(i * 55, j * 55))
-            crop_img = img[(55 * i):(55 * (i + 1)),
-                           (55 * j):(55 * (j + 1))]
-            cv2.imwrite('ocr_cell_' + str(count) + '.jpg', crop_img)
+            inner = 210 * j
+            #print("i:{} j:{}".format(i * 210, j * 210))
+            crop_img = img[(210 * i):(210 * (i + 1)),
+                           (210 * j):(210 * (j + 1))]
+            crop_img = cv2.resize(crop_img, (28, 28))
+            arr.append(crop_img)
+            #cv2.imwrite('hand_cell_' + str(count) + '.jpg', crop_img)
             count = count + 1
-
-    print(count)
 
     # im = cv2.imread('test.jpg')
     # imgray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
