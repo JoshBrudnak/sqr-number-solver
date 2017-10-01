@@ -76,21 +76,17 @@ class ClassifyDigits():
       probList.append(session.run(numbers).tolist()[0])
       print(i) 
 
-    print(probList) 
     foundNumbers = []
     for i in range(0, len(probList)):
       highProb = 0.0
       probIndex = 0
       for j in range(0, len(probList[i])):
         if probList[i][j] > highProb:
-          print("High")
-          print(probList[i][j])
           hightProb = probList[i][j]
-          probIndex = j + 1
-      if highProb == 0.0:
-        foundNumbers.append(0) 
-      else:
-        foundNumbers.append(probIndex) 
+          probIndex = j
+      
+      foundNumbers.append(probIndex) 
       
     print(foundNumbers)
+    print(len(foundNumbers))
     return foundNumbers
