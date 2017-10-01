@@ -66,6 +66,14 @@ class SudokuTable extends Component {
               }}
               className="mui-btn mui-btn--primary"
             >
+              UPLOAD
+            </button>
+            <button
+              onClick={() => {
+                console.log("fetch stuff")
+              }}
+              className="mui-btn mui-btn--primary"
+            >
               SOLVE
             </button>
             <button
