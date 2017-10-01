@@ -4,7 +4,10 @@ import Paper from 'material-ui/Paper';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
-const styles = theme => ({});
+import {stuff} from "./object.js";
+import {styles} from './stylesheet.js';
+import { withStyles } from 'material-ui/styles';
+import PropTypes from 'prop-types'; 
 class SudokuTable extends Component{
   constructor(){
     super()
@@ -12,101 +15,95 @@ class SudokuTable extends Component{
       upload: false,
     };
   }
-cell=()=>{
-    let tableCell=[];
-    let table= [];
-    let style ="";
-  for (let cell = 0; cell < 9; cell++ ){
-    if (cell ===2 || cell ===5 ){
-       tableCell.push(
-       <td style={{
-         border: "1px solid white",
-         borderRight: "3px solid white",
-         color: "white",
-         fontWeight: "bold",
-         height: "50px",
-         width: "50px",
-         backgroundColor: "#1976D2"}} 
-         key={cell+"cell"}>
-         {cell}
-         </td>);
-    }else
-       tableCell.push(
-       <td style={{
-         color: "white",
-         fontWeight: "bold",
-         height: "50px",
-         width: "50px",
-         border: "1px solid white",
-         backgroundColor: "#1976D2"}} 
-         key={cell+"cell"}>
-         {cell}
-         </td>);
-
-     }   
-     return tableCell;    
-  }
   row=()=>{
     let tableRow= [];
   for (let row = 0; row < 9; row++ ){ 
     if (row ===2 || row ===5 ){       
         tableRow.push(
         <tr style={{borderBottom: "3px solid white"}} 
-        key={row+"row"}>{this.cell()}</tr>);
+        key={row+"row"}>{this.cell(row)}</tr>);
     }else{
        tableRow.push(
         <tr 
-        key={row+"row"}>{this.cell()}</tr>);
+        key={row+"row"}>{this.cell(row)}</tr>);
     }
-         console.log(tableRow[row].key , this.cell()[row].key) 
+         console.log(stuff.solved[row]) 
     } 
    return tableRow
 
   }
+  
+cell=(row)=>{
+    const classes = this.props.classes;
+    let tableCell=[];
+  for (let col = 0; col < 9; col++ ){
+   if (col ===2 || col ===5 ){
+       tableCell.push(
+       <td className={classes.cellsBorder}
+        key={col+"cell"}>
+          {this.populateTable(row,col)}
+         </td>);
+    }else
+       tableCell.push(
+       <td className={classes.cells}
+          key={col+"cell"}
+         >
+         {this.populateTable(row,col)}
+         </td>);
+     }   
+     return tableCell;    
+  }
+populateTable=(row,col)=>{
+  if (stuff.solved[row][col]===0){
+    return ""
+  }else
+  return( stuff.solved[row][col])
+}
+  
  
 render(){
     return (
-    <Paper style={{width: '100%', justifyContent: "flex"}}>
-      <div>
+    <Paper style={{width: '100%', display: "flex"}}>
+      <div style={{justifyContent: "center", alignContent: "center"}}>
         <Toolbar>
-          <Typography type="title" style={{color:"#1976D2",fontWeight: "bold",padding:"10px"}}>
+          <Typography type="title" style={{justifyContent: "center",color:"#2196F3",fontWeight: "bold",padding:"10px"}}>
             Square Solver
           </Typography>
           </Toolbar>
-      <table  style={{borderCollapse: "collapse"}}>
+      <table   style={{borderCollapse: "collapse",justifyContent: "center"}}>
        <tbody>
     {this.row()}
     </tbody>
     </table>
-    </div>
-      <form 
-      method="post" encType="multipart/form-data">
-           <input 
-         
+   <div >
+    <form className="mui-form"
+      method="post" encType="multipart/form-data" >
+    <input id="hidden" style={{visibility:"hidden"}}       
          type="file" name="file"/>
-         <input 
-         style={{
-      textTransform:"uppercase",
-      lineHeight: '1em',
-      boxSizing: 'border-box',
-      minWidth: 88,
-      minHeight: 36,
-      padding: '11px',
-      color: "black",
-      backgroundColor:"transparent",
-      border: "none",
-      borderRadius: 2,
-      }} 
-         type="submit" value="Upload"/>
-    </form>
- 
   
-    <Button flatPrimary> Solve </Button>
-    <Button> Reset </Button>  
+  <input style={{visibility:"hidden"}}  
+         type="submit" id="upload"/>  
+  
+    </form>
+    
+    <button onClick={() => {this.getElementById("hidden").click()}} 
+    className="mui-btn mui-btn--primary"> 
+    Choose
+</button>
+<button onClick={() => {this.getElementById("upload").click()}} 
+    className="mui-btn mui-btn--primary">Upload </button>
+     <button className="mui-btn mui-btn--primary" > Solve </button>  
+     <button onClick={() => {this.populateTable(0,0)}}
+        className="mui-btn mui-btn--primary" > Reset </button> 
+    </div> 
+    </div>
  </Paper>
 
 
     );
 }
 };
-export default (SudokuTable);
+SudokuTable.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+export default withStyles(styles)(SudokuTable);
