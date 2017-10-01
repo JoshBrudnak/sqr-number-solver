@@ -1,4 +1,5 @@
-*.jpg
-*.png
+*cell_*.jpg
+*cell_*.png
+
 
 .DS_STORE
