@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import Paper from "material-ui/Paper"
 import Toolbar from "material-ui/Toolbar"
 import Typography from "material-ui/Typography"
-import { stuff, things } from "./object.js"
+import { stuff, things, getStuff } from "./object.js"
 import { styles } from "./stylesheet.js"
 import { withStyles } from "material-ui/styles"
 import PropTypes from "prop-types"
@@ -10,7 +10,7 @@ import PropTypes from "prop-types"
 class SudokuTable extends Component {
   row = () => {
     return things["unsolved"].map(row => {
-      return <tr>{this.cell(row)}</tr>
+      return <tr style={{ alignItems: "center" }}>{this.cell(row)}</tr>
     })
   }
 
@@ -22,7 +22,6 @@ class SudokuTable extends Component {
   }
 
   handleReset = () => {
-    console.log("hell0")
     let copy = things
     copy["unsolved"].map(item => {
       item = ""
@@ -47,7 +46,11 @@ class SudokuTable extends Component {
             </Typography>
           </Toolbar>
           <table
-            style={{ borderCollapse: "collapse", justifyContent: "center" }}
+            style={{
+              textAlign: "center",
+              borderCollapse: "collapse",
+              justifyContent: "center"
+            }}
           >
             <tbody>{this.row()}</tbody>
           </table>
@@ -70,7 +73,9 @@ class SudokuTable extends Component {
             </button>
             <button
               onClick={() => {
-                console.log("fetch stuff")
+                getStuff().then(grid => {
+                  console.log(grid)
+                })
               }}
               className="mui-btn mui-btn--primary"
             >

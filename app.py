@@ -12,50 +12,50 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 solved = [
     {
-      "0": {
-        "1": "3",
-        "2": "1",
-        "3": "6",
-        "4": "5",
-        "5": "7",
-        "6": "8",
-        "7": "4",
-        "8": "9",
-        "9": "2"
-      },
-      "1": {
-        "1": "5",
-        "2": "2",
-        "3": "9",
-        "4": "1",
-        "5": "3",
-        "6": "4",
-        "7": "7",
-        "8": "6",
-        "9": "8"
-      }
+        "0": {
+            "1": "3",
+            "2": "1",
+            "3": "6",
+            "4": "5",
+            "5": "7",
+            "6": "8",
+            "7": "4",
+            "8": "9",
+            "9": "2"
+        },
+        "1": {
+            "1": "5",
+            "2": "2",
+            "3": "9",
+            "4": "1",
+            "5": "3",
+            "6": "4",
+            "7": "7",
+            "8": "6",
+            "9": "8"
+        }
     }
 ]
+
 
 @app.route('/doris')
 def doris():
     return '''
     <!doctype html>
-    <title>DORIS!!!!!!!!!!</title>
-    <h1>A page for Doris</h1>
-    <h6>By Aaron Goodfellow</h6>
-    <p>Lorem Ipsum and stuff</h6>
     <div id='root'></div>
     <script src="./main.js"></script>
     '''
+
 
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+
 @app.route('/static/<path:path>')
 def send_js(path):
     return send_from_directory('static', path)
+
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
@@ -83,10 +83,11 @@ def upload_file():
     </form>
     '''
 
-@app.route('/sudoku/getSolved', methods=['GET'])
 
+@app.route('/sudoku/getSolved', methods=['GET'])
 def get_tasks():
-  return jsonify({'solved': theGrid})
+    return jsonify({'solved': theGrid})
+
 
 if __name__ == '__main__':
-  app.run(debug=True)
+    app.run(debug=True)
