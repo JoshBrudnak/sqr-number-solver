@@ -50,25 +50,46 @@ class Model():
       poolLayer = tf.layers.max_pooling2d(inputs=convLayer, pool_size=[2, 2], strides=2)
       convResult = poolLayer
 
-      init = tf.global_variables_initializer()
-      sess.run(init)
-      print(sess.run(convResult))
-    
+      #init = tf.global_variables_initializer()
+      #sess.run(init)
     pool2_flat = tf.reshape(convResult, [-1, 120])
     dense = tf.layers.dense(inputs=pool2_flat, units=1024, activation=tf.nn.relu)
     dropout = tf.layers.dropout(inputs=dense, rate=0.4, training=True)
-    
-    logits = tf.layers.dense(inputs=dropout, units=10)
-    probabilities = tf.nn.softmax(logits, name="softmax_tensor")
-    init = tf.global_variables_initializer()
-    sess.run(init)
-
-    print(sess.run(probabilities))
+    probabilities = tf.layers.dense(inputs=dropout, units=10)
 
     return probabilities 
 
   def trainModel(self, trainData, testData, trainLabels, testLabels):
-    print(trainLabels[1])
-    yhat = self.classifyImage(trainData[1], trainLabels[1])
-    #for i in range(0, len(trainData)):
-    #  self.classifyImage(trainData[i], trainLabels[i])
+    loss = 0
+    sess = tf.Session()
+
+    for i in range(0, 100):
+      yhat = self.classifyImage(trainData[i], trainLabels[i])
+      onehot = tf.one_hot(indices=tf.cast(trainLabels[i:i + 1], tf.int32), depth=10)
+      loss += tf.losses.softmax_cross_entropy(onehot_labels=onehot, logits=yhat)
+      print(i)
+    
+    trainOperation = tf.contrib.layers.optimize_loss(
+        loss=loss,
+        global_step=tf.contrib.framework.get_global_step(),
+        learning_rate=0.1,
+        optimizer="SGD") 
+
+    init = tf.global_variables_initializer()
+    sess.run(init)
+    sess.run(trainOperation)
+
+    testLoss = 0
+    for i in range(0, 100):
+      yhat = self.classifyImage(testData[i], testLabels[i])
+      init = tf.global_variables_initializer()
+      sess.run(init)
+      print(testLabels[i])
+      print(testLabels[i : i + 1])
+      print(sess.run(yhat))
+      onehot = tf.one_hot(indices=tf.cast(testLabels[i : i + 1], tf.int32), depth=10)
+      testLoss += tf.losses.softmax_cross_entropy(onehot_labels=onehot, logits=yhat)
+      print(i)
+
+    sess.run(init)
+    print(sess.run(testLoss))
