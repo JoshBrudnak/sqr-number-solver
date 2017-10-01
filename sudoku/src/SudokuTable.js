@@ -3,7 +3,7 @@ import Paper from 'material-ui/Paper';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
-import {stuff, things} from "./object.js";
+import {stuff, things,no} from "./object.js";
 import {styles} from './stylesheet.js';
 import { withStyles } from 'material-ui/styles';
 import PropTypes from 'prop-types'; 
@@ -54,20 +54,24 @@ cell=(row)=>{
   }
 
 populateTable=(row,col)=>{
-  return stuff.solved[row][col]
+  return no.stuff[row][col]
 }
 handleSolve=(row,col)=>{
-  return stuff.solved[row][col]
+row= stuff.solved[row]
+col=stuff.solved[row][col]
+ return row, col
 
 } 
 handleUpload=(row, col)=>{  
   if (things.unsolved[row][col]===0){
     return ""
   }else
-  return( things.unsolved[row][col])
+  return row , col
 } 
 handleReset=(row,col)=>{
-return ""
+  row = no.stuff[row][col]
+  col = no.stuff[row[col]]
+return no.stuff[row][col]
 }
  
 render(){
@@ -99,7 +103,7 @@ render(){
     className="mui-btn mui-btn--primary"> 
     Choose
 </button>
-<button onClick={() => {this.getElementById("upload").click()}} 
+<button onClick={() => {this.handleUpload()}} 
     className="mui-btn mui-btn--primary">Upload </button>
      <button onClick={() => {this.handleSolve()}}
        className="mui-btn mui-btn--primary" > Solve </button>  
