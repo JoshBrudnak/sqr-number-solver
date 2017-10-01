@@ -1,20 +1,33 @@
-import tensorflow as tf
+import csv
+from Model import Model
 
-class classifyDigits():
-  x = tf.placeholder(tf.float32, [None, 10])
-  weights = tf.Variable(tf.zeros([10, 10]))
-  biases = tf.Variable(tf.zeros([10]))
+class ClassifyDigits():
 
-  def parseTrainingData():
-    trainFile = tf.train.string_input_producer("mnist_train.csv")
-    testFile = tf.train.string_input_producer("mnist_train.csv")
+  # TODO get csv mnist parsing working
+  def parseTrainingData(self, csvFile, imageSize):
+    data = []
+    labels = []
+    reader = csv.reader(csvFile)
 
-    reader = tf.TextLineReader()
-    label, image = reader.read(trainFile)
-    label, image = reader.read(testFile)
- 
-    defaultLabels = tf.Variable(tf.zeros([784]))
-    trainData, trainLabels = tf.decode_csv(image, record_defaults=defaultLabels)
+    for row in reader:
+      if(len(data) <= 1000):
+        floatRow = []
+        labels.append(int(row[0]))
+        for i in range(1, len(row)):
+          floatRow.append(float(row[i]))
+       
+        image = []
+        for i in range(0, 28):
+          index = imageSize * i
+          imageRow = []
+          for j in range(0, 28):
+            imageRow.append([floatRow[index + j]])
+          image.append(imageRow)
+        data.append(image)
+      else:
+        break
+
+    return labels, data
 
   def convertImage(imageName):
     imageFile = tf.read_file(im_dir+im_name)
@@ -24,8 +37,16 @@ class classifyDigits():
   
     return image
 
-  def classifyImage():
-    y = tf.nn.softmax(tf.matmul(x, weights) + biases)
+  def train(self):
+    model = Model()
+    trainFile = open("mnist_train.csv")
+    testFile = open("mnist_test.csv")
 
-  def trainModel(trainData, testData):
-    y = tf.nn.softmax(tf.matmul(x, weights) + biases)
+    trainingLabels, trainingData = self.parseTrainingData(trainFile, 28)
+    testingLabels, testingData = self.parseTrainingData(testFile, 28) 
+ 
+    model.initModel(30, 3)
+    model.trainModel(trainingData, testingData, trainingLabels, testingLabels)
+ 
+train = ClassifyDigits()
+train.train()
