@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import Button from 'material-ui/Button';
 import Paper from 'material-ui/Paper';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
-import {stuff} from "./object.js";
+import {stuff, things} from "./object.js";
 import {styles} from './stylesheet.js';
 import { withStyles } from 'material-ui/styles';
 import PropTypes from 'prop-types'; 
@@ -53,13 +52,23 @@ cell=(row)=>{
      }   
      return tableCell;    
   }
+
 populateTable=(row,col)=>{
-  if (stuff.solved[row][col]===0){
+  return stuff.solved[row][col]
+}
+handleSolve=(row,col)=>{
+  return stuff.solved[row][col]
+
+} 
+handleUpload=(row, col)=>{  
+  if (things.unsolved[row][col]===0){
     return ""
   }else
-  return( stuff.solved[row][col])
+  return( things.unsolved[row][col])
+} 
+handleReset=(row,col)=>{
+return ""
 }
-  
  
 render(){
     return (
@@ -92,8 +101,9 @@ render(){
 </button>
 <button onClick={() => {this.getElementById("upload").click()}} 
     className="mui-btn mui-btn--primary">Upload </button>
-     <button className="mui-btn mui-btn--primary" > Solve </button>  
-     <button onClick={() => {this.populateTable(0,0)}}
+     <button onClick={() => {this.handleSolve()}}
+       className="mui-btn mui-btn--primary" > Solve </button>  
+     <button onClick={() => {this.handleReset()}}
         className="mui-btn mui-btn--primary" > Reset </button> 
     </div> 
     </div>
