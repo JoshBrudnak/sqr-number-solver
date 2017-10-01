@@ -20,11 +20,6 @@ grid1 = [[3, 0, 6, 5, 0, 8, 4, 0, 0],
 import json
 
 
-def printGrid(grid):
-        for y in range(9):
-            print()
-            for x in range(9):
-                    print(grid[y][x], end=" ")
 
 
 def findFreePosition(grid):
