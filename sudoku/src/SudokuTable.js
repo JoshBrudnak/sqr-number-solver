@@ -88,20 +88,6 @@ class SudokuTable extends Component {
               {" "}
               Reset{" "}
             </button>
-            <form method="post" enctype="multipart/form-data">
-              <input
-                id="hidden"
-                style={{ visibility: "hidden" }}
-                type="file"
-                name="file"
-              />
-              <input
-                id="upload"
-                style={{ visibility: "hidden" }}
-                type="submit"
-                value="Upload"
-              />
-            </form>
           </div>
         </div>
       </Paper>
