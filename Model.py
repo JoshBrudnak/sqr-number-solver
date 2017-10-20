@@ -45,7 +45,6 @@ class Model():
       strides=[1, 2, 2, 1],
       padding="SAME"
     )
-
     reluStep = tf.nn.relu(convLayer)
     poolLayer = tf.layers.max_pooling2d(inputs=reluStep, pool_size=[2, 2], strides=2)
     convResult = poolLayer
@@ -57,8 +56,13 @@ class Model():
     dense = tf.layers.dense(inputs=pool2_flat, units=1024, activation=tf.nn.relu)
     dropout = tf.layers.dropout(inputs=dense, rate=0.4, training=True)
     probabilities = tf.layers.dense(inputs=dropout, units=10)
-
-    return probabilities
+    
+    with tf.Session() as sess:
+      init = tf.global_variables_initializer()
+      sess.run(init)
+      probs = sess.run(probabilities)
+      
+      return probs
 
   def getBatchNum(self, batchNum, elements, trainData, labels):
     data = []
@@ -91,13 +95,8 @@ class Model():
         learning_rate=0.1,
         optimizer="SGD") 
 
-      session2 = tf.Session()
-      session2.run(self.init)
-      _, c = session2.run([trainOperation, loss], feed_dict={self.x: batchData, self.y: yhatList})
-      total_loss += c
-
-    saver = tf.train.Saver({"filters:0": self.filters})
-    saver.save(self.sess, "./trained_model/digitClassificationModel")
+    #saver = tf.train.Saver({"filters:0": self.filters})
+    #saver.save(self.sess, "./trained_model/digitClassificationModel")
 
     testLoss = 0
     for i in range(0, 1):

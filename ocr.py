@@ -1,9 +1,9 @@
 import cv2
 import numpy as np
 from ClassifyDigits import ClassifyDigits
-from matplotlib import pyplot as plt
 
-def perspective_transform():
+class ocr():
+  def perspective_transform(self):
     img = cv2.imread('sudokupic.jpg', 0)
 
     img = cv2.medianBlur(img,7)
@@ -64,7 +64,7 @@ def perspective_transform():
 
     cv2.imwrite("warped.jpg", warp)
 
-def detect_rects():
+  def detect_rects(self):
     img = cv2.imread('warped.jpg', 0)
     height = img.shape[0]
     width = img.shape[1]
@@ -88,10 +88,12 @@ def detect_rects():
                 count = count + 1
     return arr
 
-
-if __name__ == '__main__':
-    perspective_transform()
-    images = detect_rects()
+  def getImageClassifications(self):
+    self.perspective_transform()
+    images = self.detect_rects()
     digit = ClassifyDigits()
     numbers = digit.classifyDigitArray(images)
     print(numbers)
+
+ocr_ = ocr()
+ocr_.getImageClassifications()
