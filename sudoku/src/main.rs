@@ -30,11 +30,26 @@ fn main() {
     }
 
 
-    /*
-     *  NEED TO CREATE BLOCK
-     *
-     */
+    // for block creation
+    let letters = vec![
+        vec!['A', 'B', 'C'],
+        vec!['D', 'E', 'F'],
+        vec!['G', 'H', 'I'],
+    ];
+    let nums = vec![
+        vec!['1', '2', '3'],
+        vec!['4', '5', '6'],
+        vec!['7', '8', '9'],
+    ];
 
+
+    for l in letters.iter() {
+        for n in nums.iter() {
+            unit_list.push(cross(&l, &n));
+        }
+    }
+
+    println!("{:?}", unit_list);
 
 }
 
