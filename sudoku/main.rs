@@ -1,4 +1,4 @@
-#[macro_use] extern crate itertools;
+extern crate itertools;
 use std::collections::HashMap;
 use std::collections::HashSet;
 use itertools::multizip;
