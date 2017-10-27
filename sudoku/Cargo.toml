@@ -1,0 +1,7 @@
+[package]
+name = "sudoku"
+version = "0.1.0"
+authors = ["KaJuan Johnson <kdjohnson23@oakland.edu>"]
+
+[dependencies]
+itertools = "0.7.1"
