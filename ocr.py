@@ -4,6 +4,7 @@ from ClassifyDigits import ClassifyDigits
 from matplotlib import pyplot as plt
 
 def perspective_transform():
+    # print(cv2.getVersionMajor())
     img = cv2.imread('sudokupic.jpg', 0)
 
     img = cv2.medianBlur(img,7)
@@ -12,15 +13,17 @@ def perspective_transform():
 
     cv2.imwrite("grayer.jpg", th4)
 
-    img = cv2.imread("grayer.jpg", 0)
-    blob = cv2.imread('sudokupic.jpg', 0)
+    # img = cv2.imread("grayer.jpg", 0)
+    blob = cv2.imread('sudokupic.0.jpg', 0)
     #ret,thresh = cv2.threshold(img, 40, 255, 0)
-    img,contours,hierarchy = cv2.findContours(img, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    contours, hierarchy = cv2.findContours(img, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     cv2.drawContours(img, contours, -1, 255, 3)
     c = max(contours, key = cv2.contourArea)
     peri = cv2.arcLength(c, True)
     approx = cv2.approxPolyDP(c, 0.02 * peri, True)
     cv2.drawContours(blob, [approx], -1, (0, 255, 0), 3)
+
+    # c = max(contours, key = cv2.contourArea)
 
     pts = approx.reshape(4, 2)
     rect = np.zeros((4, 2), dtype = "float32")
@@ -58,7 +61,6 @@ def perspective_transform():
     # the perspective to grab the screen
     M = cv2.getPerspectiveTransform(rect, dst)
     warp = cv2.warpPerspective(blob, M, (maxWidth, maxHeight))
-
     #cv2.imshow("WARPED", warp)
     #cv2.waitKey()
 

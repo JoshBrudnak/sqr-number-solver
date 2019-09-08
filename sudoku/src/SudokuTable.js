@@ -1,10 +1,10 @@
 import React, { Component } from "react"
-import Paper from "material-ui/Paper"
-import Toolbar from "material-ui/Toolbar"
-import Typography from "material-ui/Typography"
+import Paper from "@material-ui/core/Paper"
+import Toolbar from "@material-ui/core/Toolbar"
+import Typography from "@material-ui/core/Typography"
 import { stuff, things, getStuff } from "./object.js"
 import { styles } from "./stylesheet.js"
-import { withStyles } from "material-ui/styles"
+import { withStyles } from "@material-ui/core/styles"
 import PropTypes from "prop-types"
 
 class SudokuTable extends Component {
@@ -88,6 +88,20 @@ class SudokuTable extends Component {
               {" "}
               Reset{" "}
             </button>
+            <form method="post" enctype="multipart/form-data">	
+              <input	
+                id="hidden"	
+                style={{ visibility: "hidden" }}	
+                type="file"	
+                name="file"	
+              />	
+              <input	
+                id="upload"	
+                style={{ visibility: "hidden" }}	
+                type="submit"	
+                value="Upload"	
+              />	
+            </form>
           </div>
         </div>
       </Paper>
